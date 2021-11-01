@@ -35,7 +35,7 @@ export class ItemController {
     return await this.service.find(Number(id));
   }
 
-  @Put(':id/update')
+  @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() itemData: UpdateItemDTO,
@@ -49,7 +49,7 @@ export class ItemController {
     return await this.service.update(Number(id), newData);
   }
 
-  @Delete(':id/delete')
+  @Delete(':id')
   async delete(@Param('id') id: string): Promise<DeleteResult> {
     return await this.service.delete(Number(id));
   }
