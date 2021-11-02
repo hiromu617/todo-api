@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Item } from 'src/entities/item.entity';
 import { Repository, InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateItemDTO } from './item.dto';
+import { CreateItemDTO, FindItemDTO } from './item.dto';
 
 @Injectable()
 export class ItemService {
@@ -13,6 +13,10 @@ export class ItemService {
 
   async findAll(): Promise<Item[]> {
     return await this.itemRepository.find();
+  }
+
+  async findFromUserId(userId: string): Promise<Item[]> {
+    return await this.itemRepository.find({ where: { user_id: userId } });
   }
 
   // テーブルにアイテムを追加する関数を定義

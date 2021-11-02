@@ -6,10 +6,11 @@ import {
   Delete,
   Body,
   Param,
+  Query,
 } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { Item } from '../entities/item.entity';
-import { CreateItemDTO, UpdateItemDTO } from './item.dto';
+import { CreateItemDTO, FindItemDTO, UpdateItemDTO } from './item.dto';
 import { InsertResult, UpdateResult, DeleteResult } from 'typeorm';
 
 @Controller('item')
@@ -23,6 +24,14 @@ export class ItemController {
     return await this.service.findAll();
   }
 
+  // 特定のuser_idを持つitemを取得
+  @Get(':user_id')
+  async getItemListFromUserId(
+    @Param('user_id') user_id: string,
+  ): Promise<Item[]> {
+    return await this.service.findFromUserId(user_id);
+  }
+
   // `item`のURIへのPOSTメソッドでデータ新規登録．
   @Post()
   async addItem(@Body() item: CreateItemDTO): Promise<InsertResult> {
@@ -30,10 +39,10 @@ export class ItemController {
   }
 
   // `item/id番号`のURIへのGETメソッドでid指定で1件データ取得．
-  @Get(':id')
-  async getItem(@Param('id') id: string): Promise<Item> {
-    return await this.service.find(Number(id));
-  }
+  // @Get(':id')
+  // async getItem(@Param('id') id: string): Promise<Item> {
+  //   return await this.service.find(Number(id));
+  // }
 
   @Put(':id')
   async update(

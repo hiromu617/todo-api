@@ -6,6 +6,12 @@ export class CreateItemDTO {
   @IsString()
   title: string;
 }
+export class FindItemDTO {
+  // 空文字NG，string型指定
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+}
 
 export class UpdateItemDTO {
   @IsOptional()
