@@ -16,6 +16,11 @@ export class UpdateItemDTO {
   @IsOptional()
   @IsNotEmpty()
   @IsString()
+  user_id: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
   description: string;
 
   @IsOptional()
