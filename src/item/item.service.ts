@@ -42,7 +42,16 @@ export class ItemService {
   }
 
   //  idを指定してテーブルのデータを削除する関数を定義
-  async delete(id: number): Promise<DeleteResult> {
+  async delete(id: number, user_id: string | null): Promise<DeleteResult> {
+    const item = await this.find(Number(id));
+
+    console.log(item.user_id);
+    console.log(user_id);
+    // userIdが一致するかバリデーション
+    if (item.user_id !== user_id) {
+      return Promise.reject(new Error('Incorrect user'));
+    }
+
     return await this.itemRepository.delete(id);
   }
 }

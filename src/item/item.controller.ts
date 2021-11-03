@@ -71,8 +71,22 @@ export class ItemController {
     return;
   }
 
-  @Delete(':id')
-  async delete(@Param('id') id: string): Promise<DeleteResult> {
-    return await this.service.delete(Number(id));
+  @Post(':id/delete')
+  async delete(
+    @Param('id') id: string,
+    @Body() formData: { user_id: string | null },
+  ): Promise<DeleteResult> {
+    try {
+      await this.service.delete(Number(id), formData.user_id);
+    } catch (e) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'Incorrect user',
+        },
+        403,
+      );
+    }
+    return;
   }
 }
