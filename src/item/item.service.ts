@@ -30,8 +30,15 @@ export class ItemService {
   }
 
   // idを指定してテーブルのデータを更新する関数を定義
-  async update(id: number, item): Promise<UpdateResult> {
-    return await this.itemRepository.update(id, item);
+  async update(id: number, newData): Promise<UpdateResult> {
+    const item = await this.find(Number(id));
+
+    // userIdが一致するかバリデーション
+    if (item.user_id !== newData.user_id) {
+      return Promise.reject(new Error('Incorrect user'));
+    }
+
+    return await this.itemRepository.update(id, newData);
   }
 
   //  idを指定してテーブルのデータを削除する関数を定義

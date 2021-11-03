@@ -7,6 +7,8 @@ import {
   Body,
   Param,
   Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { Item } from '../entities/item.entity';
@@ -49,13 +51,24 @@ export class ItemController {
     @Param('id') id: string,
     @Body() itemData: UpdateItemDTO,
   ): Promise<UpdateResult> {
-    const newData = !itemData.finish
-      ? itemData
-      : {
-          ...itemData,
-          ...{ finish: itemData.finish.toLowerCase() === 'true' },
-        };
-    return await this.service.update(Number(id), newData);
+    try {
+      const newData = !itemData.finish
+        ? itemData
+        : {
+            ...itemData,
+            ...{ finish: itemData.finish.toLowerCase() === 'true' },
+          };
+      await this.service.update(Number(id), newData);
+    } catch (e) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'Incorrect user',
+        },
+        403,
+      );
+    }
+    return;
   }
 
   @Delete(':id')
